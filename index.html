@@ -19,73 +19,61 @@
         <div class="profile__info">
           <div class="profile__about">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
-            <h2 class="profile__subtitle">Исследователь океана</h2>
+            <p class="profile__subtitle">Исследователь океана</p>
           </div>
-          <button class="profile__edit"></button>
+          <button type="button" class="profile__edit"></button>
         </div>
-        <button class="profile__add"></button>
+        <button type="button" class="profile__add"></button>
       </section>
 
       <section class="elements">
         <ul class="elements__list">
           <li class="element">
             <img src="./images/elements-element-1-6.png" class="element__image" alt="Карачаевск">
-            <div class="element__footer">
               <div class="element__info">
                 <h2 class="element__title">Карачаевск</h2>
-                <button class="element__like"></button>
+                <button type="button" class="element__like"></button>
               </div>
-            </div>
           </li>
 
           <li class="element">
             <img src="./images/elements-element-2-4.png" class="element__image" alt="Гора Эльбрус">
-            <div class="element__footer">
               <div class="element__info">
                 <h2 class="element__title">Гора Эльбрус</h2>
-                <button class="element__like"></button>
+                <button type="button" class="element__like"></button>
               </div>
-            </div>
           </li>
 
           <li class="element">
             <img src="./images/elements-element-3-5.png" class="element__image" alt="Домбай">
-            <div class="element__footer">
               <div class="element__info">
                 <h2 class="element__title">Домбай</h2>
-                <button class="element__like"></button>
+                <button type="button" class="element__like"></button>
               </div>
-            </div>
           </li>
 
           <li class="element">
             <img src="./images/elements-element-2-4.png" class="element__image" alt="Гора Эльбрус">
-            <div class="element__footer">
               <div class="element__info">
                 <h2 class="element__title">Гора Эльбрус</h2>
-                <button class="element__like"></button>
+                <button type="button" class="element__like"></button>
               </div>
-            </div>
           </li>
 
           <li class="element">
             <img src="./images/elements-element-3-5.png" class="element__image" alt="Домбай">
-            <div class="element__footer">
               <div class="element__info">
                 <h2 class="element__title">Домбай</h2>
-                <button class="element__like"></button>
+                <button type="button" class="element__like"></button>
               </div>
-            </div>
           </li>
 
           <li class="element">
             <img src="./images/elements-element-1-6.png" class="element__image" alt="Карачаевск">
-            <div class="element__footer">
               <div class="element__info">
                 <h2 class="element__title">Карачаево-Черкессия</h2>
-                <button class="element__like"></button>
+                <button type="button" class="element__like"></button>
               </div>
-            </div>
           </li>
         </ul>  
       </section>
@@ -98,12 +86,12 @@
 
   <div class="popup">
     <div class="popup__container">
-      <button class="popup__close"></button>
-      <form class="popup__edit-form">
+      <button type="button" class="popup__close"></button>
+      <form name="form" class="popup__form">
         <h2 class="popup__title">Редактировать профиль</h2>
         <fieldset class="popup__input-container">
-          <input type="text" class="popup__form-item popup__name-item">
-          <input type="text" class="popup__form-item popup__about-item">
+          <input name="name" type="text" required class="popup__form-item popup__form-item_field_name">
+          <input name="about" type="text" required class="popup__form-item popup__form-item_field_about">
         </fieldset>
         <button type="submit" class="popup__save">Сохранить</button>
       </form>

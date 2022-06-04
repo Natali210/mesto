@@ -3,9 +3,9 @@
     line-height: 1.14;
     font-weight: 500;
     margin: 0;
-    max-width: 440px;
+    max-width: 480px;
     text-overflow: ellipsis;
-    white-space: wrap;
+    white-space: nowrap;
     overflow: hidden;
   }
   
@@ -13,8 +13,13 @@
   .profile__title {
     font-size: 27px;
     line-height: 1.21;
-    margin-top: 22.25px;
+    margin: 27px 0 8px 28px;
     text-align: center;
-    max-width: 220px;
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .profile__title {
+    max-width: 250px;
   }
 }

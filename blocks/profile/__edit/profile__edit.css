@@ -8,6 +8,7 @@
   background-size: 10px 10px;
   background-position: center;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 
 .profile__edit:hover {
@@ -19,8 +20,7 @@
   .profile__edit {
     width: 18px;
     height: 18px;
-    margin: 8px 0 0 10px;
+    margin: 34px 0 0 12px;
     background-size: 7.5px 7.5px;
-    margin-top: 30.25px;
   }
 }

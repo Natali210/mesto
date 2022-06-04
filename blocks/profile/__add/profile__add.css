@@ -9,6 +9,7 @@
   background-size: 22px 22px;
   background-position: center;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 
 .profile__add:hover {
@@ -20,6 +21,6 @@
   .profile__add {
     width: calc(100% - 38px);
     background-size: 16px 16px;
-    margin: 36px 0;
+    margin: 32px 0;
   }
 }

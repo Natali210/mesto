@@ -1,9 +1,7 @@
 .element__info {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
   background-color: #FFFFFF;
-  min-height: 79px;
-  border-radius: 0 0 10px 10px;
+  max-height: 361px;
+  max-width: 282px;
+  border-radius: 10px;
+  position: relative;
 }

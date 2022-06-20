@@ -80,17 +80,17 @@ const createCard = (element) => {
   });
 
   cardImage.addEventListener('click', () => {
-    const openImageCardPopup = (element) => {
-      imageFieldElement.src = element.link;
-      imageFieldElement.alt = element.name;
-      captionFieldElement.textContent = element.name;
-    };
-
-    openPopup(popupImage);
     openImageCardPopup(element);
   });
 
   return cardElement;
+};
+
+const openImageCardPopup = (element) => {
+  imageFieldElement.src = element.link;
+  imageFieldElement.alt = element.name;
+  captionFieldElement.textContent = element.name;
+  openPopup(popupImage);
 };
 
 const addCard = (element) => {

@@ -150,5 +150,5 @@ enableValidation({
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button',
   inputErrorClass: 'popup__input_type_error',
-  errorVisibleClass: 'popup__error_visible'
+  errorVisibleClass: 'popup__error-visible'
 });

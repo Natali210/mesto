@@ -1,14 +1,14 @@
-const placeField = document.querySelector('.popup__form-item_field_place');
-const linkField = document.querySelector('.popup__form-item_field_image-link');
+const placeField = document.querySelector('.popup__input_place');
+const linkField = document.querySelector('.popup__input_link');
 const formElementCard = document.querySelector('.popup__form_new-card');
 const profileEditButton = document.querySelector('.profile__edit');
 const popupProfile = document.querySelector('.popup_profile');
 const closePopupProfile = document.querySelector('.popup__close_profile');
 const closePopupAddCard = document.querySelector('.popup__close_add-card');
 const closePopupImage = document.querySelector('.popup__close_open-image');
-const nameField = document.querySelector('.popup__form-item_field_name');
+const nameField = document.querySelector('.popup__input_name');
 const profileTitle = document.querySelector('.profile__title');
-const aboutField = document.querySelector('.popup__form-item_field_about');
+const aboutField = document.querySelector('.popup__input_about');
 const profileSubtitle = document.querySelector('.profile__subtitle');
 const formElementProfile = document.querySelector('.popup__form_profile');
 const popupAddCard = document.querySelector('.popup_add-card');
@@ -16,20 +16,41 @@ const addCardButton = document.querySelector('.profile__add');
 const popupImage = document.querySelector('.popup_open-image');
 const captionFieldElement = document.querySelector('.popup__place-title');
 const imageFieldElement = document.querySelector('.popup__image-element');
+const allPopups = document.querySelectorAll('.popup');
+const buttonElementSubmit = formElementCard.querySelector('.popup__button');
 
-//Функция для открытия попапа "Редактировать профиль" 
+//Закрыть попап кликом на оверлей
+allPopups.forEach((popup) => {
+  popup.addEventListener('mousedown', (evt) => {
+    if (
+      evt.target.classList.contains('popup_opened') ||
+      evt.target.classList.contains('popup__button-close')
+    ) {
+      closePopup(popup);
+    }
+  });
+});
+
+//Закрыть попап по Esc
+const handleEsc = (evt) => {
+  if (evt.key === 'Escape') {
+    closePopup(document.querySelector('.popup_opened'));
+  }
+};
+
+//Открыть попап
 function openPopup(popupElement) {
   popupElement.classList.add('popup_opened');
-  nameField.value = profileTitle.textContent;
-  aboutField.value = profileSubtitle.textContent;
+  document.addEventListener('keydown', handleEsc);
 };
 
-//Функция для закрытия попапа
+//Закрыть попап
 function closePopup(popupElement) {
   popupElement.classList.remove('popup_opened');
+  document.removeEventListener('keydown', handleEsc);
 };
 
-//Функция для сохранения заполненной формы "Редактировать профиль"
+//Cохранить заполненную форму "Редактировать профиль"
 function handleProfilePopup(evt) {
   evt.preventDefault();
   profileTitle.textContent = nameField.value;
@@ -37,11 +58,7 @@ function handleProfilePopup(evt) {
   closePopup(popupProfile);
 };
 
-//Действия с формой "Редактировать профиль"
-profileEditButton.addEventListener('click', function () {
-  openPopup(popupProfile);
-});
-
+//Слушатели для закрытия попапов
 closePopupProfile.addEventListener('click', function () {
   closePopup(popupProfile);
 })
@@ -50,17 +67,31 @@ closePopupImage.addEventListener('click', function () {
   closePopup(popupImage);
 })
 
-formElementProfile.addEventListener('submit', handleProfilePopup);
-
-//Действия с формой "Добавить карточку места"
-addCardButton.addEventListener('click', function () {
-  openPopup(popupAddCard);
-})
-
 closePopupAddCard.addEventListener('click', function () {
   closePopup(popupAddCard);
 })
 
+formElementProfile.addEventListener('submit', handleProfilePopup);
+
+//Открытие каждого из попапов
+addCardButton.addEventListener('click', function () {
+  openPopup(popupAddCard);
+})
+
+profileEditButton.addEventListener('click', function () {
+  openPopup(popupProfile);
+  nameField.value = profileTitle.textContent;
+  aboutField.value = profileSubtitle.textContent;
+});
+
+const openImageCardPopup = (element) => {
+  imageFieldElement.src = element.link;
+  imageFieldElement.alt = element.name;
+  captionFieldElement.textContent = element.name;
+  openPopup(popupImage);
+};
+
+//Создать новые карточки мест
 const cardTemplate = document.querySelector('#element-template').content;
 
 const createCard = (element) => {
@@ -86,13 +117,6 @@ const createCard = (element) => {
   return cardElement;
 };
 
-const openImageCardPopup = (element) => {
-  imageFieldElement.src = element.link;
-  imageFieldElement.alt = element.name;
-  captionFieldElement.textContent = element.name;
-  openPopup(popupImage);
-};
-
 const addCard = (element) => {
   const newCard = createCard(element);
   const cardList = document.querySelector('.elements__list');
@@ -100,7 +124,7 @@ const addCard = (element) => {
   cardList.prepend(newCard);
 };
 
-//Функция для сохранения заполненной формы "Новое место"
+//Сохранить заполненную форму "Новое место"
 const handlePopupCard = (evt) => {
   evt.preventDefault();
 
@@ -112,7 +136,19 @@ const handlePopupCard = (evt) => {
   addCard(card);
   closePopup(popupAddCard);
   formElementCard.reset();
+
+  buttonElementSubmit.classList.add('popup__button_disabled');
+  buttonElementSubmit.setAttribute('disabled', true);
 };
 
 initialCards.forEach(addCard);
 formElementCard.addEventListener('submit', handlePopupCard);
+
+//Config для валидации
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inputErrorClass: 'popup__input_type_error',
+  errorVisibleClass: 'popup__error_visible'
+});

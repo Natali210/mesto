@@ -18,13 +18,14 @@ const captionFieldElement = document.querySelector('.popup__place-title');
 const imageFieldElement = document.querySelector('.popup__image-element');
 const allPopups = document.querySelectorAll('.popup');
 const buttonElementSubmit = formElementCard.querySelector('.popup__button');
+const cardList = document.querySelector('.elements__list');
 
-//Закрыть попап кликом на оверлей
+//Закрыть попап кликом на оверлей и "крестики"
 allPopups.forEach((popup) => {
   popup.addEventListener('mousedown', (evt) => {
     if (
       evt.target.classList.contains('popup_opened') ||
-      evt.target.classList.contains('popup__button-close')
+      evt.target.classList.contains('popup__close')
     ) {
       closePopup(popup);
     }
@@ -58,19 +59,6 @@ function handleProfilePopup(evt) {
   closePopup(popupProfile);
 };
 
-//Слушатели для закрытия попапов
-closePopupProfile.addEventListener('click', function () {
-  closePopup(popupProfile);
-})
-
-closePopupImage.addEventListener('click', function () {
-  closePopup(popupImage);
-})
-
-closePopupAddCard.addEventListener('click', function () {
-  closePopup(popupAddCard);
-})
-
 formElementProfile.addEventListener('submit', handleProfilePopup);
 
 //Открытие каждого из попапов
@@ -92,9 +80,8 @@ const openImageCardPopup = (element) => {
 };
 
 //Создать новые карточки мест
-const cardTemplate = document.querySelector('#element-template').content;
-
 const createCard = (element) => {
+  const cardTemplate = document.querySelector('#element-template').content;
   const cardElement = cardTemplate.querySelector('.element').cloneNode(true);
   const cardImage = cardElement.querySelector('.element__image');
 
@@ -119,8 +106,6 @@ const createCard = (element) => {
 
 const addCard = (element) => {
   const newCard = createCard(element);
-  const cardList = document.querySelector('.elements__list');
-
   cardList.prepend(newCard);
 };
 

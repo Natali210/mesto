@@ -18,7 +18,6 @@ const formElementProfile = document.querySelector('.popup__form_profile');
 const placeField = document.querySelector('.popup__input_place');
 const linkField = document.querySelector('.popup__input_link');
 const formElementCard = document.querySelector('.popup__form_new-card');
-const submitButtonElement = formElementCard.querySelector('.popup__button');
 const cardsList = document.querySelector('.elements__list');
 
 //Функция для открытия попапа
@@ -31,8 +30,7 @@ export const openPopup = (popup) => {
 addCardButton.addEventListener('click', () => {
   openPopup(popupAddCard);
   formCardValidation.resetValidation();
-  placeField.value = '';
-  linkField.value = '';
+  formElementCard.reset();
 })
 
 //"Слушатель" для открытия попапа редактирования профиля
@@ -41,13 +39,14 @@ profileEditButton.addEventListener('click', () => {
   nameField.value = profileTitle.textContent;
   aboutField.value = profileSubtitle.textContent;
   formProfileValidation.resetValidation();
+  formProfileValidation.disabledSubmitButton();
 });
 
 //Функция для закрытия попапа
-const closePopup = (popup) => {
+function closePopup(popup) {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', handlEscape);
-};
+}
 
 //Закрытие попапов кликом на оверлей и "крестики"
 allPopups.forEach((popup) => {
@@ -90,16 +89,13 @@ const handlePopupCard = (evt) => {
   addCard(card);
   closePopup(popupAddCard);
   formElementCard.reset();
-
-  submitButtonElement.classList.add('popup__button_disabled');
-  submitButtonElement.setAttribute('disabled', true);
 };
 
 formElementCard.addEventListener('submit', handlePopupCard);
 
 //Создание новых карточек мест
 const createCard = (data) => {
-  const card = new Card(data);
+  const card = new Card(data, '.element-template');
   const cardElement = card.generateCard();
   return cardElement;
 };

@@ -46,6 +46,11 @@ class FormValidator {
       this._submitButtonElement.disabled = false;
     }
   }
+
+  //Неактивность кнопки при открытии попапа редактирования профиля
+  disabledSubmitButton() {
+    this._submitButtonElement.disabled = true;
+  }
   
   //Добавление "слушателей" на все поля и кнопку подтверждения
   _setEventListeners() {
@@ -55,12 +60,12 @@ class FormValidator {
         this._toggleButtonState();
       }); 
     })
-  
-    this._toggleButtonState();
   }
 
   //Очистка формы от ошибок
   resetValidation() {
+    this._toggleButtonState();
+    
     this._inputList.forEach((inputElement) => {
        this._hideInputError(inputElement);
     })

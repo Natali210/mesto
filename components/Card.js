@@ -1,14 +1,13 @@
-import { imageElement, captionElement, openPopup, popupImage } from './index.js';
-
 class Card {
-  constructor(data, cardSelector){
+  constructor(data, cardSelector, openImage) {
     this._name = data.name;
     this._link = data.link;
     this._cardSelector = cardSelector;
+    this._openImage = openImage;
   }
 
   //Функция, чтобы возвращать разметку и клонировать элемент
-  _getTemplate(){
+  _getTemplate() {
     const cardElement = document
     .querySelector(this._cardSelector)
     .content
@@ -22,11 +21,12 @@ class Card {
   generateCard() {
     //Запись разметки в поле element, чтобы у других элементов появился доступ к ней
     this._element = this._getTemplate();
+    this._imageElement = this._element.querySelector('.element__image')
     this._setEventListeners();
 
     //Добавление данных
-    this._cardImage.src = this._link;
-    this._cardImage.alt = this._name;
+    this._imageElement.src = this._link;
+    this._imageElement.alt = this._name;
     this._element.querySelector('.element__title').textContent = this._name;
 
     return this._element;
@@ -48,11 +48,11 @@ class Card {
     });
 
     this._cardImage.addEventListener('click', () => {
-    this._openImageClick();
+    this._openImage(this._name, this._link);
     }); 
   }
 
-  //Методы для лайка, удаления карточки и открытия изображения
+  //Методы для лайка, удаления карточки
   _handleLikeClick() {
     this._likeButton.classList.toggle('element__like_active');
   }
@@ -61,13 +61,6 @@ class Card {
     this._element.remove();
     this._element = null;
   }
-  
-  _openImageClick() {
-    imageElement.src = this._link;
-    imageElement.alt = this._name;
-    captionElement.textContent = this._name;
-    return openPopup(popupImage);
-  };
 }
 
 export default Card;

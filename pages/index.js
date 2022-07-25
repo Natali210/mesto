@@ -22,20 +22,21 @@ import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 
+//Cохранение заполненной формы редактирования профиля
+const handleProfilePopup = (userData) => {
+  profileInfo.setUserInfo(userData);
+  console.log(profileInfo);
+  console.log(userData);
+};
+
 //"Слушатель" для открытия попапа редактирования профиля
 profileEditButton.addEventListener('click', () => {
   profilePopup.open();
-
-  const { userName, userAbout } = profileInfo.getUserInfo();
-  nameField.value = userName;
-  aboutField.value = userAbout;
+  const profileInputValues = profileInfo.getUserInfo();
+  nameField.value = profileInputValues.name;
+  aboutField.value = profileInputValues.job;
   formProfileValidation.resetValidation();
 });
-
-//Cохранение заполненной формы редактирования профиля
-const handleProfilePopup = (data) => {
-  profileInfo.setUserInfo(data);
-};
 
 //Создание экземпляра класса PopupWithForm для попапа профиля
 const profilePopup = new PopupWithForm(popupProfile, handleProfilePopup);
@@ -44,7 +45,7 @@ profilePopup.setEventListeners();
 //Отображение добавленной информации о пользователе на странице, их перезапись
 const profileInfo = new UserInfo({
   userName: profileTitle,
-  userAbout: profileSubtitle,
+  userJob: profileSubtitle,
 });
 
 //Открытие попапа с изображением
@@ -60,7 +61,7 @@ imagePopup.setEventListeners();
 addCardButton.addEventListener('click', () => {
   newCardPopup.open();
   formCardValidation.resetValidation();
-  formElementCard.reset();
+  //formElementCard.reset();
 })
 
 //Создание новых карточек мест
@@ -68,6 +69,7 @@ const createCard = (data) => {
   const card = new Card(data, '.element-template', openImage);
   const cardElement = card.generateCard();
   return cardElement;
+  //console.log(cardElement);
 };
 
 //"Отрисовка" элементов на странице
@@ -81,6 +83,7 @@ const cardList = new Section({ items: initialCards,
   );
 
 cardList.renderItem();
+console.log(cardList);
 
 //Создание карточки из заполненной формы
 const handlerCardSubmit = (data) => {

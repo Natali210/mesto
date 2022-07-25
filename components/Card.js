@@ -22,12 +22,13 @@ class Card {
     //Запись разметки в поле element, чтобы у других элементов появился доступ к ней
     this._element = this._getTemplate();
     this._imageElement = this._element.querySelector('.element__image')
+    this._titleImageElement = this._element.querySelector('.element__title')
     this._setEventListeners();
 
     //Добавление данных
     this._imageElement.src = this._link;
     this._imageElement.alt = this._name;
-    this._element.querySelector('.element__title').textContent = this._name;
+    this._titleImageElement.textContent = this._name;
 
     return this._element;
   }

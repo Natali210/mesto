@@ -1,23 +1,25 @@
 export default class UserInfo {
   //Принимает объект с селекторами элементов "имя" и "о себе"
-  constructor({ userName, userAbout }) {
-    this._userName = userName;
-    this._userAbout = userAbout;
+  constructor({ userName, userJob }) {
+    this._name = userName;
+    this._job = userJob;
+    //console.log(this._name);
+    //console.log(this._job);
   }
 
   //Метод, возвращающий объект с данными пользователя
   getUserInfo() {
-    this._userInfoValues = {
-      userName: this._userName.textContent,
-      userAbout: this._userAbout.textContent,
-    };
-
-    return this._userInfoValues;
+    const userInfo = {
+      name: this._name.textContent,
+      job: this._job.textContent
+    }
+    return userInfo;
+    console.log(userInfo);
   }
 
   //Метод, принимающий новые данные пользователя и добавляющий на страницу
-  setUserInfo(data) {
-    this._userName.textContent = data.userName;
-    this._userAbout.textContent = data.userAbout;
+  setUserInfo(userInfo) {
+    this._name.textContent = userInfo.name;
+    this._job.textContent = userInfo.job;
   }
 }

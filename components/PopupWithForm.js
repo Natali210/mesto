@@ -11,11 +11,11 @@ export default class PopupWithForm extends Popup {
 
   //Метод, который собирает данные всех полей формы
   _getInputValues() {
-    this._values = {};
-    this._inputs.forEach((input) => {
-      this._values[input.name] = input.value;
+    const values = {};
+    this._inputs.forEach(input => {
+      values[input.name] = input.value;
     });
-    return this._values;
+    return values;
   }
 
   //Метод, добавляющий обработчик клика "крестику" и сабмиту формы
@@ -28,9 +28,9 @@ export default class PopupWithForm extends Popup {
     });
   }
 
-  /*Метод сброса полей при закрытия попапа (перезапись родительского закрытия попапа)
+  //Метод сброса полей при закрытия попапа (перезапись родительского закрытия попапа)
   close() {
-    super.close;
+    super.close();
     this._form.reset();
-  }*/
+  }
 }

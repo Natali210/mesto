@@ -1,9 +1,0 @@
-.root__header {
-  margin: 38px 0 40px;
-}
-
-@media screen and (max-width: 879px) {
-  .root__header {
-    margin: 25px 0 42px;
-  }
-} 

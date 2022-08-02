@@ -33,7 +33,6 @@ const profileInfo = new UserInfo({
 //Cохранение заполненной формы редактирования профиля
 const handleProfilePopup = (userData) => {
   profileInfo.setUserInfo(userData);
-  console.log(userData);
 };
 
 //"Слушатель" для открытия попапа редактирования профиля
@@ -63,7 +62,6 @@ imagePopup.setEventListeners();
 addCardButton.addEventListener('click', () => {
   newCardPopup.open();
   formCardValidation.resetValidation();
-  //formElementCard.reset();
 })
 
 //Создание новых карточек мест
@@ -88,7 +86,6 @@ cardList.renderItem();
 //Создание карточки из заполненной формы
 const handlerCardSubmit = (data) => {
   const cardElement = createCard(data);
-  console.log(data);
   cardList.addItem(cardElement);
   newCardPopup.close();
 };

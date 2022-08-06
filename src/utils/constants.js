@@ -1,30 +1,3 @@
-export const initialCards = [
-    {
-      place: 'Архыз',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
-    },
-    {
-      place: 'Челябинская область',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg',
-    },
-    {
-      place: 'Иваново',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg',
-    },
-    {
-      place: 'Камчатка',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg',
-    },
-    {
-      place: 'Холмогорский район',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg',
-    },
-    {
-      place: 'Байкал',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg',
-    }
-  ];
-
 export const popupImage = document.querySelector('.popup_open-image');
 export const imageElement = document.querySelector('.popup__image-element');
 export const captionElement = document.querySelector('.popup__place-title');
@@ -42,12 +15,12 @@ export const placeField = document.querySelector('.popup__input_place');
 export const linkField = document.querySelector('.popup__input_link');
 export const formElementCard = document.querySelector('.popup__form_new-card');
 export const cardsList = document.querySelector('.elements__list');
-
-//Config для валидации
 export const config = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button',
   inputErrorClass: 'popup__input_type_error',
-  errorVisibleClass: 'popup__error-visible'
+  errorVisibleClass: 'popup__error-visible',
+  host: 'https://mesto.nomoreparties.co/v1/cohort-47',
+  token: 'f085916c-6915-4c31-bcde-3cb49b2623b6',
 };

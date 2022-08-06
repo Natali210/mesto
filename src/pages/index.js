@@ -1,7 +1,6 @@
 import './../pages/index.css';
 
-import { 
-  initialCards,
+import {
   addCardButton,
   popupAddCard,
   profileEditButton,
@@ -17,6 +16,7 @@ import {
   formElementCard
 } from '../utils/constants.js';
 
+import Api from '../components/Api.js';
 import Card from '../components/Card.js';
 import FormValidator from '../components/FormValidator.js';
 import Section from '../components/Section.js';
@@ -49,20 +49,12 @@ profileEditButton.addEventListener('click', () => {
 const profilePopup = new PopupWithForm(popupProfile, handleProfilePopup);
 profilePopup.setEventListeners();
 
-//Открытие попапа с изображением
-const handleCardClick = (place, link) => {
-  imagePopup.open(place, link);
-}
 
-//Создание экземпляра класса PopupWithImage для попапа с изображениями
-const imagePopup = new PopupWithImage(popupImage);
-imagePopup.setEventListeners();
 
-//"Слушатель" для открытия попапа добавления карточки
-addCardButton.addEventListener('click', () => {
-  newCardPopup.open();
-  formCardValidation.resetValidation();
-})
+
+
+//Создание экземляра класса для карточек с сервера
+const api = new Api(config.host, config.token);
 
 //Создание новых карточек мест
 const createCard = (data) => {
@@ -71,17 +63,29 @@ const createCard = (data) => {
   return cardElement;
 };
 
-//"Отрисовка" элементов на странице
-const cardList = new Section({ items: initialCards,
-  renderer: (item) => {
-    const cardElement = createCard(item);
-    cardList.addItem(cardElement);
-    },
-  }, 
-  cardsList 
-  );
+//Получение карточек с сервера
+api.getCards()
+  //Когда сервер дал карточки, начинаем их отрисовывать
+  .then((items) => {
+    const cardList = new Section({ items,
+      renderer: (item) => {
+        const cardElement = createCard(item);
+        cardList.addItem(cardElement);
+        },
+      }, 
+      cardsList 
+      );
+    cardList.renderItem();
 
-cardList.renderItem();
+//Создание экземпляра класса PopupWithForm для попапа с карточками
+const newCardPopup = new PopupWithForm(popupAddCard, handlerCardSubmit);
+newCardPopup.setEventListeners();
+
+//"Слушатель" для открытия попапа добавления карточки
+addCardButton.addEventListener('click', () => {
+  newCardPopup.open();
+  formCardValidation.resetValidation();
+})
 
 //Создание карточки из заполненной формы
 const handlerCardSubmit = (data) => {
@@ -89,10 +93,21 @@ const handlerCardSubmit = (data) => {
   cardList.addItem(cardElement);
   newCardPopup.close();
 };
+  });
 
-//Создание экземпляра класса PopupWithForm для попапа с карточками
-const newCardPopup = new PopupWithForm(popupAddCard, handlerCardSubmit);
-newCardPopup.setEventListeners();
+//Открытие попапа с изображением
+const handleCardClick = (name, link) => {
+  imagePopup.open(name, link);
+}
+
+//Создание экземпляра класса PopupWithImage для попапа с изображениями
+const imagePopup = new PopupWithImage(popupImage);
+imagePopup.setEventListeners();
+
+
+
+
+
 
 
 //Валидация

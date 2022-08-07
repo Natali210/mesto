@@ -1,9 +1,12 @@
 export default class Section {
   //Принимает в конструктор массив данных, функцию отрисовки данных на странице и селектор контейнера для элементов
-  constructor({ items, renderer }, cardsList) {
-    this._renderedItems = items; 
+  constructor({ renderer }, cardsList) {
     this._renderer = renderer;
     this._container = cardsList;
+  }
+
+  setItems(items) {
+    this._renderedItems = items; 
   }
 
   addItem(item) {

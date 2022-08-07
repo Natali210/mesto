@@ -2,21 +2,71 @@ export default class Api {
   constructor(host, token) {
     this._host = host;
     this._token = token;
+    this._getJsonOrError = this._getJsonOrError.bind(this);
+    this._getHeaders = this._getHeaders.bind(this);
+  }
+
+  //Получение Headers для различных методов
+  _getHeaders() {
+    return {
+      authorization: this._token,
+      'content-type': 'application/json',
+    }
+  }
+
+  //Ответ в промисах различных методов в зависимости от наличия ошибки
+  _getJsonOrError(res) {
+    if (res.ok) {
+      return res.json();
+    }
+
+    throw new Error(`Ошибка: ${res.status}`);
+  }
+
+  //Метод, который вернет информацию о пользователе
+  getUserInfo(){
+    return fetch(`${this._host}/users/me`, {
+      headers: this._getHeaders(),
+    })
+    .then(this._getJsonOrError)
+  }
+
+  //Метод, который сохранит измененные данные о пользователе
+  setProfileInfo(data){
+    return fetch(`${this._host}/users/me`, {
+      method: 'PATCH',
+      headers: this._getHeaders(),
+      body: JSON.stringify({
+        name: data.name,
+        about: data.about,
+      }),
+    })
+    .then(this._getJsonOrError)
   }
 
   //Метод, который вернет карточки
   getCards(){
     return fetch(`${this._host}/cards`, {
-      headers: {
-        authorization: this._token,
-      },
+      headers: this._getHeaders(),
     })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
+    .then(this._getJsonOrError)
+  }
 
-      throw new Error(`Ошибка: ${res.status}`);
+  //Метод, добавляющий карточки
+  addCard(name) {
+    return fetch(`${this._host}/cards`, {
+      method: 'POST',
+      headers: this._getHeaders(),
+      body: JSON.stringify((name)),
     })
+    .then(this._getJsonOrError)
+  }
+
+  deleteCard(id) {
+    return fetch(`${this._host}/cards/${id}`, {
+      method: 'DELETE',
+      headers: this._getHeaders(),
+    })
+    .then(this._getJsonOrError)
   }
 }

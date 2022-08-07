@@ -1,9 +1,10 @@
 export default class Card {
-  constructor(data, cardSelector, handleCardClick) {
+  constructor(data, cardSelector, handleCardClick, deleteCard) {
     this._name = data.name;
     this._link = data.link;
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
+    this._deleteCard = deleteCard; 
   }
 
   //Функция, чтобы возвращать разметку и клонировать элемент
@@ -45,7 +46,7 @@ export default class Card {
     });
 
     this._element.querySelector('.element__delete').addEventListener('click', () => {
-    this._handleDeleteClick();
+      this._deleteCard();
     });
 
     this._cardImage.addEventListener('click', () => {
@@ -58,8 +59,8 @@ export default class Card {
     this._likeButton.classList.toggle('element__like_active');
   }
   
-  _handleDeleteClick() {
-    this._element.remove();
-    this._element = null;
-  }
+  _deleteCard() {
+      this._element.remove();
+      this._element = null;
+    }
 }

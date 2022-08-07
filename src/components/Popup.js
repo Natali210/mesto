@@ -26,10 +26,10 @@ export default class Popup {
 
   //Закрытие попапов кликом на оверлей и "крестик"
   setEventListeners() {
-    this._popup.addEventListener('mousedown', (e) => {
+    this._popup.addEventListener('mousedown', (evt) => {
         if (
-          e.target.classList.contains('popup_opened') ||
-          e.target.classList.contains('popup__close')
+          evt.target.classList.contains('popup_opened') ||
+          evt.target.classList.contains('popup__close')
         ) {
           this.close();
         }

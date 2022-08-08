@@ -13,7 +13,10 @@ import {
   popupImage,
   config,
   formElementProfile,
-  formElementCard
+  formElementCard,
+  popupAvatar,
+  newAvatarButton,
+  profileAvatar  
 } from '../utils/constants.js';
 
 import Api from '../components/Api.js';
@@ -24,12 +27,15 @@ import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 
+let userId;
+
 //Создание экземляра класса для получения данных с сервера
 const api = new Api(config.host, config.token);
 
 //Получение данных с сервера
 Promise.all([api.getUserInfo(), api.getCards()])
   .then(([userData, items]) => {
+    userId = userData._id;
     profileInfo.setUserInfo(userData);
     cardList.setItems(items);
     cardList.renderItem(items);
@@ -39,6 +45,7 @@ Promise.all([api.getUserInfo(), api.getCards()])
 const profileInfo = new UserInfo({
   userName: profileTitle,
   userAbout: profileSubtitle,
+  userAvatar: profileAvatar,
 });
 
 //Cохранение заполненной формы редактирования профиля
@@ -69,7 +76,7 @@ profilePopup.setEventListeners();
 
 //Создание новых карточек мест
 const createCard = (data) => {
-  const card = new Card(data, '.element-template', handleCardClick, deleteCard);
+  const card = new Card(data, '.element-template', handleCardClick, {userId: userId });
   const cardElement = card.generateCard();
   return cardElement;
 };
@@ -116,11 +123,32 @@ const handleCardClick = (name, link) => {
 const imagePopup = new PopupWithImage(popupImage);
 imagePopup.setEventListeners();
 
-//Удаление карточки
-function deleteCard(id) {
-  return api.deleteCard(id);
-}
+//Создание экземпляра класса PopupWithForm для попапа изменения аватара
+const newAvatarPopup = new PopupWithForm(popupAvatar, handleAvatarSubmit);
+newAvatarPopup.setEventListeners();  
 
+//"Слушатель" для открытия попапа изменения аватара
+newAvatarButton.addEventListener('click', () => {
+  newAvatarPopup.open();
+})
+
+//Cохранение заполненной формы изменения аватара
+async function handleAvatarSubmit(userData) {
+  try {
+    const res = await api.setNewAvatar(userData);
+    profileInfo.setUserInfo(res);
+    profilePopup.close();
+  }
+  catch(error) {
+    console.log(error);
+  }
+};
+
+/*Удаление карточки
+function deleteCard(card) {
+  api.deleteCard(card._id);
+  card.handleDeleteClick();
+}*/
 
 
 

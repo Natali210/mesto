@@ -44,6 +44,18 @@ export default class Api {
     .then(this._getJsonOrError)
   }
 
+  //Метод, который сохранит измененные данные о пользователе
+  setNewAvatar(data){
+    return fetch(`${this._host}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._getHeaders(),
+      body: JSON.stringify({
+        avatar: data.avatar,
+      }),
+    })
+    .then(this._getJsonOrError)
+  }
+
   //Метод, который вернет карточки
   getCards(){
     return fetch(`${this._host}/cards`, {
@@ -62,11 +74,11 @@ export default class Api {
     .then(this._getJsonOrError)
   }
 
-  deleteCard(id) {
-    return fetch(`${this._host}/cards/${id}`, {
+  /*deleteCard(_id) {
+    return fetch(`${this._host}/cards/${_id}`, {
       method: 'DELETE',
       headers: this._getHeaders(),
     })
     .then(this._getJsonOrError)
-  }
+  }*/
 }

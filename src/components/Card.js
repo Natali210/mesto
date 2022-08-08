@@ -1,10 +1,11 @@
 export default class Card {
-  constructor(data, cardSelector, handleCardClick, deleteCard) {
+  constructor(data, cardSelector, handleCardClick, {userId}) {
     this._name = data.name;
     this._link = data.link;
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
-    this._deleteCard = deleteCard; 
+    this._id = userId;
+    this._cardOwnerId = data.owner._id;
   }
 
   //Функция, чтобы возвращать разметку и клонировать элемент
@@ -24,6 +25,7 @@ export default class Card {
     this._element = this._getTemplate();
     this._imageElement = this._element.querySelector('.element__image')
     this._titleImageElement = this._element.querySelector('.element__title')
+    this._cardDeleteButton = this._element.querySelector('.element__delete');
     this._setEventListeners();
 
     //Добавление данных
@@ -31,6 +33,12 @@ export default class Card {
     this._imageElement.alt = this._name;
     this._titleImageElement.textContent = this._name;
 
+    //Проверка автора карточки
+    if (this._id !== this._cardOwnerId) {
+      this._cardDeleteButton.style.display = "none";
+    }
+    
+    this._setEventListeners();
     return this._element;
   }
 
@@ -45,8 +53,8 @@ export default class Card {
     this._handleLikeClick();
     });
 
-    this._element.querySelector('.element__delete').addEventListener('click', () => {
-      this._deleteCard();
+    this._cardDeleteButton.addEventListener('click', () => {
+      this._handleDeleteClick();
     });
 
     this._cardImage.addEventListener('click', () => {
@@ -58,9 +66,15 @@ export default class Card {
   _handleLikeClick() {
     this._likeButton.classList.toggle('element__like_active');
   }
-  
-  _deleteCard() {
-      this._element.remove();
-      this._element = null;
+ 
+  /*cardOwner() {
+    if(this._userId !== this._ownerId) {
+      this._cardDeleteBtn.remove();
     }
+  }*/
+
+  _handleDeleteClick() {
+    this._element.remove();
+    this._element = null;
+  }
 }

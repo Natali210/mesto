@@ -15,6 +15,9 @@ export const placeField = document.querySelector('.popup__input_place');
 export const linkField = document.querySelector('.popup__input_link');
 export const formElementCard = document.querySelector('.popup__form_new-card');
 export const cardsList = document.querySelector('.elements__list');
+export const popupAvatar = document.querySelector('.popup_new-avatar');
+export const newAvatarButton = document.querySelector('.profile__avatar-overlay');
+export const profileAvatar = document.querySelector('.profile__avatar');
 export const config = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',

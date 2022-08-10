@@ -82,4 +82,22 @@ export default class Api {
     })
     .then(this._getJsonOrError)
   }
+
+    //Метод, собирающий лайки
+  putLike(data) {
+    return fetch(`${this._host}/cards/${data._id}/likes`, {
+      method: 'PUT',
+      headers: this._getHeaders(),
+    })
+    .then(this._getJsonOrError)
+  }
+
+    //Метод, удаляющий лайк
+  removeLike(data) {
+    return fetch(`${this._host}/cards/${data._id}/likes`, {
+      method: 'DELETE',
+      headers: this._getHeaders(),
+    })
+    .then(this._getJsonOrError)
+  }
 }

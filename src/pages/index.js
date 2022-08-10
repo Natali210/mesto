@@ -57,7 +57,7 @@ async function handleProfilePopup(userData) {
     profileInfo.setUserInfo(res);
     profilePopup.close();
   }
-  catch(error) {
+  catch (error) {
     console.log(error);
   }
 };
@@ -79,36 +79,60 @@ profilePopup.setEventListeners();
 //Создание новых карточек мест
 const createCard = (data) => {
   const card = new Card(data, '.element-template', handleCardClick, {
-    userId: userId}, handleDeletingSubmit);
+    userId: userId,
+    handleDeletingSubmit: () => {
+      deletingPopup.open(data);
+      deletingPopup.setSubmitAction({
+        handleSubmitAction: () => {
+          api.deleteCard(data)
+            .then(() => {
+              deletingPopup.close();
+              card.delete();
+            })
+            .catch((error) =>
+              console.log(error));
+        }
+      });
+    },
+    
+    handleAddLike: () => {
+      api.putLike(data)
+      .then((res) => {
+        card.sumUpLikes(res.likes);
+        card.likeActive();
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
+    },
+
+    handleRemoveLike: () => {
+      api.removeLike(data)
+      .then((res) => {
+        card.sumUpLikes(res.likes);
+        card.likeCanceled();
+      })
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      });
+    }
+  });
   const cardElement = card.generateCard();
   return cardElement;
 }
 
-//Открытие попапа для подтверждения удаления карточки
-function handleDeletingSubmit(data) {
-  deletingPopup.open();
-  deletingPopup.getCardObject(data);
-}
-
-//Вызов метода удаления карточки на сервере
-function handleSubmitAction(data) {
-  api.deleteCard(data)
-  .then(() => {
-    data.delete();
-  })
-  .catch((error) =>
-    console.log(error));
-  }
+//Создание экземпляра класса PopupWithForm для попапа подтверждения удаления
+const deletingPopup = new PopupForConfirm(popupConfirm, { submitForm: () => deletingPopup.submitAction(), });
 
 //Выносим cardList в общую зону видимости
 const cardList = new Section({
   renderer: (item) => {
     const cardElement = createCard(item);
     cardList.addItem(cardElement);
-    },
-  }, 
-  cardsList 
-  );
+  },
+},
+  cardsList
+);
 
 //Создание экземпляра класса PopupWithForm для попапа с карточками
 const newCardPopup = new PopupWithForm(popupAddCard, { submitForm: handlerCardSubmit });
@@ -128,7 +152,7 @@ async function handlerCardSubmit(data) {
     cardList.addItem(cardElement);
     newCardPopup.close();
   }
-  catch(error) {
+  catch (error) {
     console.log(error);
   }
 };
@@ -144,12 +168,9 @@ imagePopup.setEventListeners();
 
 //Создание экземпляра класса PopupWithForm для попапа изменения аватара
 const newAvatarPopup = new PopupWithForm(popupAvatar, handleAvatarSubmit);
-newAvatarPopup.setEventListeners();  
+newAvatarPopup.setEventListeners();
 
-//Создание экземпляра класса PopupWithForm для попапа подтверждения удаления
-const deletingPopup = new PopupForConfirm(popupConfirm, handleSubmitAction);
-
-deletingPopup.setEventListeners();  
+deletingPopup.setEventListeners();
 
 //"Слушатель" для открытия попапа изменения аватара
 newAvatarButton.addEventListener('click', () => {
@@ -163,7 +184,7 @@ async function handleAvatarSubmit(userData) {
     profileInfo.setUserInfo(res);
     profilePopup.close();
   }
-  catch(error) {
+  catch (error) {
     console.log(error);
   }
 };

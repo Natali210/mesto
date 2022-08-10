@@ -16,7 +16,8 @@ import {
   formElementCard,
   popupAvatar,
   newAvatarButton,
-  profileAvatar  
+  profileAvatar,
+  popupConfirm
 } from '../utils/constants.js';
 
 import Api from '../components/Api.js';
@@ -26,6 +27,7 @@ import Section from '../components/Section.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
 import PopupWithImage from '../components/PopupWithImage.js';
+import PopupForConfirm from '../components/PopupForConfirm.js';
 
 let userId;
 
@@ -76,10 +78,27 @@ profilePopup.setEventListeners();
 
 //Создание новых карточек мест
 const createCard = (data) => {
-  const card = new Card(data, '.element-template', handleCardClick, {userId: userId });
+  const card = new Card(data, '.element-template', handleCardClick, {
+    userId: userId}, handleDeletingSubmit);
   const cardElement = card.generateCard();
   return cardElement;
-};
+}
+
+//Открытие попапа для подтверждения удаления карточки
+function handleDeletingSubmit(data) {
+  deletingPopup.open();
+  deletingPopup.getCardObject(data);
+}
+
+//Вызов метода удаления карточки на сервере
+function handleSubmitAction(data) {
+  api.deleteCard(data)
+  .then(() => {
+    data.delete();
+  })
+  .catch((error) =>
+    console.log(error));
+  }
 
 //Выносим cardList в общую зону видимости
 const cardList = new Section({
@@ -92,7 +111,7 @@ const cardList = new Section({
   );
 
 //Создание экземпляра класса PopupWithForm для попапа с карточками
-const newCardPopup = new PopupWithForm(popupAddCard, handlerCardSubmit);
+const newCardPopup = new PopupWithForm(popupAddCard, { submitForm: handlerCardSubmit });
 newCardPopup.setEventListeners();
 
 //"Слушатель" для открытия попапа добавления карточки
@@ -127,6 +146,11 @@ imagePopup.setEventListeners();
 const newAvatarPopup = new PopupWithForm(popupAvatar, handleAvatarSubmit);
 newAvatarPopup.setEventListeners();  
 
+//Создание экземпляра класса PopupWithForm для попапа подтверждения удаления
+const deletingPopup = new PopupForConfirm(popupConfirm, handleSubmitAction);
+
+deletingPopup.setEventListeners();  
+
 //"Слушатель" для открытия попапа изменения аватара
 newAvatarButton.addEventListener('click', () => {
   newAvatarPopup.open();
@@ -143,15 +167,6 @@ async function handleAvatarSubmit(userData) {
     console.log(error);
   }
 };
-
-/*Удаление карточки
-function deleteCard(card) {
-  api.deleteCard(card._id);
-  card.handleDeleteClick();
-}*/
-
-
-
 
 //Валидация
 const formProfileValidation = new FormValidator(formElementProfile, config);

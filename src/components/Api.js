@@ -74,11 +74,12 @@ export default class Api {
     .then(this._getJsonOrError)
   }
 
-  /*deleteCard(_id) {
-    return fetch(`${this._host}/cards/${_id}`, {
+  //Метод, удаляющий карточки
+  deleteCard(data) {
+    return fetch(`${this._host}/cards/${data._id}`, {
       method: 'DELETE',
       headers: this._getHeaders(),
     })
     .then(this._getJsonOrError)
-  }*/
+  }
 }

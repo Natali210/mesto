@@ -2,7 +2,7 @@ import Popup from '../components/Popup.js';
 
 export default class PopupWithForm extends Popup {
   //Принимает в конструктор селектор попапа и колбэк сабмита формы
-  constructor (allPopups, submitForm) {
+  constructor (allPopups, { submitForm }) {
     super(allPopups);
     this._form = this._popup.querySelector('.popup__form');
     this._inputs = this._form.querySelectorAll('.popup__input');

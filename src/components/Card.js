@@ -1,13 +1,21 @@
 export default class Card {
-  constructor(data, cardSelector, handleCardClick, {userId}) {
+  constructor(data, cardSelector, handleCardClick, {userId}, handleDeletingSubmit) {
     this._name = data.name;
     this._link = data.link;
     this._cardSelector = cardSelector;
     this._handleCardClick = handleCardClick;
     this._id = userId;
     this._cardOwnerId = data.owner._id;
+    this._cardId = data._id;
+    this._handleDeletingSubmit = handleDeletingSubmit;
+    this._data = data;
   }
 
+  //Получить карточку
+  getCard() {
+    return this._data;
+  }
+  
   //Функция, чтобы возвращать разметку и клонировать элемент
   _getTemplate() {
     const cardElement = document
@@ -54,7 +62,7 @@ export default class Card {
     });
 
     this._cardDeleteButton.addEventListener('click', () => {
-      this._handleDeleteClick();
+      this._handleDeletingSubmit(this._data, this._element);
     });
 
     this._cardImage.addEventListener('click', () => {
@@ -66,14 +74,8 @@ export default class Card {
   _handleLikeClick() {
     this._likeButton.classList.toggle('element__like_active');
   }
- 
-  /*cardOwner() {
-    if(this._userId !== this._ownerId) {
-      this._cardDeleteBtn.remove();
-    }
-  }*/
 
-  _handleDeleteClick() {
+  delete() {
     this._element.remove();
     this._element = null;
   }

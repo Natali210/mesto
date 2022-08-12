@@ -45,7 +45,7 @@ export default class Api {
   }
 
   //Метод, который сохранит измененные данные о пользователе
-  setNewAvatar(data){
+  addNewAvatar(data){
     return fetch(`${this._host}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._getHeaders(),

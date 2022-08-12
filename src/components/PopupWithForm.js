@@ -7,8 +7,8 @@ export default class PopupWithForm extends Popup {
     this._form = this._popup.querySelector('.popup__form');
     this._inputs = this._form.querySelectorAll('.popup__input');
     this._submitForm = submitForm;
-    this._formSubmitButton = this._popup.querySelector('.popup__button');
-    this._formSubmitContent = this._formSubmitButton.textContent;
+    this._cardSubmitButton = this._popup.querySelector('.popup__button');
+    this._cardSubmitButtonContent = this._cardSubmitButton.textContent;
   }
 
   //Метод, который собирает данные всех полей формы
@@ -20,10 +20,15 @@ export default class PopupWithForm extends Popup {
     return values;
   }
 
-  getFormValues(data) {
-    this._inputs.forEach((item) => {
-      item.value = data[item.id];
-    });
+  //Уведомление пользователя о процессе загрузки
+  downloadInfo(download, text) {
+    if (download) {
+      this._cardSubmitButton.textContent = text;
+    } else {
+      setTimeout(() => {
+        this._cardSubmitButton.textContent = this._cardSubmitButtonContent;
+      }, 600);
+    }
   }
 
   //Метод, добавляющий обработчик клика "крестику" и сабмиту формы

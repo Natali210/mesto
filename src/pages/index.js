@@ -42,25 +42,34 @@ Promise.all([api.getUserInfo(), api.getCards()])
     cardList.setItems(items);
     cardList.renderItem(items);
   })
-  .catch((err) => console.log(err));
+  .catch((err) => console.log(`Ошибка: ${err}`));
 
+//Создание экземпляра класса UserInfo для отображения информации о пользователе 
 const profileInfo = new UserInfo({
   userName: profileTitle,
   userAbout: profileSubtitle,
   userAvatar: profileAvatar,
 });
 
+//Создание экземпляра класса PopupWithForm для попапа профиля
+const profilePopup = new PopupWithForm(popupProfile, { submitForm: handleProfilePopup });
+profilePopup.setEventListeners();
+
 //Cохранение заполненной формы редактирования профиля
 async function handleProfilePopup(userData) {
+  profilePopup.downloadInfo(true, 'Сохранение...');
   try {
     const res = await api.setProfileInfo(userData);
     profileInfo.setUserInfo(res);
     profilePopup.close();
   }
-  catch (error) {
-    console.log(error);
+  catch (err) {
+    console.log(`Ошибка: ${err}`); 
   }
-};
+  finally {
+    profilePopup.downloadInfo(false);
+  }
+}
 
 //"Слушатель" для открытия попапа редактирования профиля
 profileEditButton.addEventListener('click', () => {
@@ -72,9 +81,30 @@ profileEditButton.addEventListener('click', () => {
   formProfileValidation.disabledSubmitButton();
 });
 
-//Создание экземпляра класса PopupWithForm для попапа профиля
-const profilePopup = new PopupWithForm(popupProfile, handleProfilePopup);
-profilePopup.setEventListeners();
+//Создание экземпляра класса PopupWithForm для попапа изменения аватара
+const newAvatarPopup = new PopupWithForm(popupAvatar, { submitForm: handleAvatarSubmit });
+newAvatarPopup.setEventListeners();
+
+//"Слушатель" для открытия попапа изменения аватара
+newAvatarButton.addEventListener('click', () => {
+  newAvatarPopup.open();
+})
+
+//Cохранение заполненной формы изменения аватара
+async function handleAvatarSubmit(userData) {
+  newAvatarPopup.downloadInfo(true, 'Сохранение...');
+  try {
+    const res = await api.addNewAvatar(userData);
+    profileInfo.setUserInfo(res);
+    profilePopup.close();
+  }
+  catch (err) {
+    console.log(`Ошибка: ${err}`); 
+  }
+  finally {
+    profilePopup.downloadInfo(false);
+  }
+};
 
 //Создание новых карточек мест
 const createCard = (data) => {
@@ -89,8 +119,9 @@ const createCard = (data) => {
               deletingPopup.close();
               card.delete();
             })
-            .catch((error) =>
-              console.log(error));
+            .catch((err) => {
+              console.log(`Ошибка: ${err}`);
+            });
         }
       });
     },
@@ -99,7 +130,7 @@ const createCard = (data) => {
       api.putLike(data)
       .then((res) => {
         card.sumUpLikes(res.likes);
-        card.likeActive();
+        card.likeAdded();
       })
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
@@ -121,10 +152,7 @@ const createCard = (data) => {
   return cardElement;
 }
 
-//Создание экземпляра класса PopupWithForm для попапа подтверждения удаления
-const deletingPopup = new PopupForConfirm(popupConfirm, { submitForm: () => deletingPopup.submitAction(), });
-
-//Выносим cardList в общую зону видимости
+//Создание экземпляра класса Section для отрисовки карточек на странице
 const cardList = new Section({
   renderer: (item) => {
     const cardElement = createCard(item);
@@ -146,6 +174,7 @@ addCardButton.addEventListener('click', () => {
 
 //Создание карточки из заполненной формы
 async function handlerCardSubmit(data) {
+  newCardPopup.downloadInfo(true, 'Сохранение...');
   try {
     const res = await api.addCard(data);
     const cardElement = createCard(res);
@@ -155,39 +184,24 @@ async function handlerCardSubmit(data) {
   catch (error) {
     console.log(error);
   }
+  finally {
+    profilePopup.downloadInfo(false);
+  }
 };
 
-//Открытие попапа с изображением
-const handleCardClick = (name, link) => {
-  imagePopup.open(name, link);
-}
+//Создание экземпляра класса PopupWithForm для попапа подтверждения удаления
+const deletingPopup = new PopupForConfirm(popupConfirm, { submitForm: () => deletingPopup.submitAction(), });
+
+deletingPopup.setEventListeners();
 
 //Создание экземпляра класса PopupWithImage для попапа с изображениями
 const imagePopup = new PopupWithImage(popupImage);
 imagePopup.setEventListeners();
 
-//Создание экземпляра класса PopupWithForm для попапа изменения аватара
-const newAvatarPopup = new PopupWithForm(popupAvatar, handleAvatarSubmit);
-newAvatarPopup.setEventListeners();
-
-deletingPopup.setEventListeners();
-
-//"Слушатель" для открытия попапа изменения аватара
-newAvatarButton.addEventListener('click', () => {
-  newAvatarPopup.open();
-})
-
-//Cохранение заполненной формы изменения аватара
-async function handleAvatarSubmit(userData) {
-  try {
-    const res = await api.setNewAvatar(userData);
-    profileInfo.setUserInfo(res);
-    profilePopup.close();
-  }
-  catch (error) {
-    console.log(error);
-  }
-};
+//Открытие попапа с изображением
+const handleCardClick = (name, link) => {
+  imagePopup.open(name, link);
+}
 
 //Валидация
 const formProfileValidation = new FormValidator(formElementProfile, config);

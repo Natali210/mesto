@@ -20,6 +20,13 @@ export default class PopupWithForm extends Popup {
     return values;
   }
 
+  //Метод, добавляюший данные в инпуты
+  setInputValues(data) {
+    this._inputs.forEach((input) => {
+      input.value = data[input.name];
+    });
+  }
+
   //Уведомление пользователя о процессе загрузки
   downloadInfo(download, text) {
     if (download) {
@@ -37,7 +44,6 @@ export default class PopupWithForm extends Popup {
     this._form.addEventListener('submit', (evt) => {
       evt.preventDefault();
       this._submitForm(this._getInputValues());
-      this.close();
     });
   }
 

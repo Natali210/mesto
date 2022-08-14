@@ -20,6 +20,7 @@ export const newAvatarButton = document.querySelector('.profile__avatar-overlay'
 export const profileAvatar = document.querySelector('.profile__avatar');
 export const popupConfirm = document.querySelector('.popup_confirm');
 export const popupAvatarForm = document.querySelector('.popup__form_new-avatar');
+export const formValidators = {};
 export const config = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',

@@ -10,13 +10,11 @@ import {
   cardsList,
   popupImage,
   config,
-  formElementProfile,
-  formElementCard,
   popupAvatar,
   newAvatarButton,
   profileAvatar,
   popupConfirm,
-  popupAvatarForm
+  formValidators
 } from '../utils/constants.js';
 
 import Api from '../components/Api.js';
@@ -71,8 +69,8 @@ profileEditButton.addEventListener('click', () => {
   profilePopup.open();
   const profileInputValues = profileInfo.getUserInfo();
   profilePopup.setInputValues(profileInputValues);
-  formProfileValidation.resetValidation();
-  formProfileValidation.disabledSubmitButton();
+  formValidators['profile-edit'].resetValidation();
+  formValidators['profile-edit'].disabledSubmitButton();
 });
 
 //Создание экземпляра класса PopupWithForm для попапа изменения аватара
@@ -82,7 +80,7 @@ newAvatarPopup.setEventListeners();
 //"Слушатель" для открытия попапа изменения аватара
 newAvatarButton.addEventListener('click', () => {
   newAvatarPopup.open();
-  formAvatarValidator.resetValidation();
+  formValidators['new-avatar'].resetValidation();
 })
 
 //Cохранение заполненной формы изменения аватара
@@ -94,7 +92,7 @@ function handleAvatarSubmit(data) {
       newAvatarPopup.close();
     })
     .catch((err) => console.log(`Ошибка: ${err}`))
-    .finally(() => profilePopup.downloadInfo(false))
+    .finally(() => newAvatarPopup.downloadInfo(false))
   }
 
 //Создание новых карточек мест
@@ -155,7 +153,7 @@ newCardPopup.setEventListeners();
 //"Слушатель" для открытия попапа добавления карточки
 addCardButton.addEventListener('click', () => {
   newCardPopup.open();
-  formCardValidation.resetValidation();
+  formValidators['add-card'].resetValidation();
 })
 
 //Создание карточки из заполненной формы
@@ -168,7 +166,7 @@ function handlerCardSubmit(data) {
       newCardPopup.close();
     })
   .catch((err) => console.log(`Ошибка: ${err}`))
-  .finally(() => profilePopup.downloadInfo(false))
+  .finally(() => newCardPopup.downloadInfo(false))
 }
 
 //Создание экземпляра класса PopupWithForm для попапа подтверждения удаления
@@ -186,9 +184,14 @@ const handleCardClick = (name, link) => {
 }
 
 //Валидация
-const formProfileValidation = new FormValidator(formElementProfile, config);
-const formCardValidation = new FormValidator(formElementCard, config);
-const formAvatarValidator = new FormValidator(popupAvatarForm, config);
-formProfileValidation.enableValidation();
-formCardValidation.enableValidation();
-formAvatarValidator.enableValidation();
+const enableValidation = (config) => {
+  const formList = Array.from(document.querySelectorAll(config.formSelector))
+  formList.forEach((formElement) => {
+    const validator = new FormValidator(formElement, config)
+    const formName = formElement.getAttribute('name')
+    formValidators[formName] = validator;
+    validator.enableValidation();
+   });
+ };
+
+ enableValidation(config);

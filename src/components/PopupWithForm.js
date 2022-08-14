@@ -30,9 +30,11 @@ export default class PopupWithForm extends Popup {
   //Уведомление пользователя о процессе загрузки
   downloadInfo(download, text) {
     if (download) {
+      this._cardSubmitButton.disabled = true;
       this._cardSubmitButton.textContent = text;
     } else {
       setTimeout(() => {
+        this._cardSubmitButton.disabled = false;
         this._cardSubmitButton.textContent = this._cardSubmitButtonContent;
       }, 600);
     }
